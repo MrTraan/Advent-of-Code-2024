@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 class Day1 : Day
 {
-    public override long RunStep1(string input)
+    public override (long, long) Run(string input)
     {
         var lines = input
             .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -22,44 +22,17 @@ class Day1 : Day
         left.Sort();
         right.Sort();
 
-        int delta = 0;
+        int step1 = 0;
+        int step2 = 0;
 
         for (int i = 0; i < left.Count; i++)
         {
-            delta += Math.Abs(left[i] - right[i]);
+            step1 += Math.Abs(left[i] - right[i]);
+            step2 += left[i] * right.Count(x => x == left[i]);
         }
 
-        return delta;
+        return (step1, step2);
     }
-
-    public override long RunStep2(string input)
-    {
-        var lines = input
-            .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
-        var left = new List<int>();
-        var right = new List<int>();
-
-        foreach (var line in lines)
-        {
-            var tuple = line.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            left.Add(int.Parse(tuple[0]));
-            right.Add(int.Parse(tuple[1]));
-        }
-
-        left.Sort();
-        right.Sort();
-
-        int delta = 0;
-
-        for (int i = 0; i < left.Count; i++)
-        {
-            delta += left[i] * right.Count(x => x == left[i]);
-        }
-
-        return delta;
-     }
-
     public override bool Test()
     {
         string testInput = @"
@@ -73,9 +46,8 @@ class Day1 : Day
         
         long expected1 = 11, expected2 = 31;
         
-        long step1 = RunStep1(testInput);
+        var (step1, step2) = Run(testInput);
         Debug.Assert(step1 == expected1);
-        long step2 = RunStep2(testInput);
         Debug.Assert(step2 == expected2);
         return step1 == expected1 && step2 == expected2;
     }

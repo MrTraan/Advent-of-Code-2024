@@ -13,8 +13,7 @@ namespace AdventOfCode
             return match.Success ? int.Parse(match.Value) : 0;
         }
 
-        public abstract long RunStep1(string input);
-        public abstract long RunStep2(string input);
+        public abstract (long, long) Run(string input);
 
         public abstract bool Test();
 
